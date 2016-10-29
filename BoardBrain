@@ -1,0 +1,249 @@
+//
+//  BoardBrain.swift
+//  Blade
+//
+//  Created by Aditya Paruchuri on 10/29/16.
+//  Copyright © 2016 TStevensonApps. All rights reserved.
+//
+
+import Foundation
+
+
+class BoardBrain {
+    
+    
+    private var rows = 5
+    private var cols = 5
+    
+    private var knightRow = 4
+    private var knightCol = 0
+    private var gunmanRow = 0
+    private var gunmanCol = 4
+    
+    private var knightTeleports = 3
+    private var gunmanTeleports = 3
+    
+    private var numSquares: Int {
+        return rows * cols
+    }
+    
+    private var knightToMove = true
+    private var gunmanToMove = false
+    
+    private var isDeletedArray: [Bool] = []
+   
+    private var rand = 0
+    
+    var squareRows: [Int] = []
+    var squareCols: [Int] = []
+    
+    var i = 0
+    
+    func fillSquareRows() {
+        while (i < rows) {
+    
+            squareRows[i] = i
+            i = i + 1
+    
+        }
+    }
+    
+    func fillSquareCols() {
+        while (i < cols) {
+            
+            squareCols[i] = i
+            i = i + 1
+            
+        }
+    }
+    
+    func getSquareRow(squareNumber: Int) -> Int {
+        
+        return squareNumber % 5
+        
+    }
+    
+    func getSquareCol(squareNumber: Int) -> Int {
+        
+        return squareNumber / 5
+        
+    }
+    
+    func moveKnight(num: Int) {
+        
+        let newKnightSquareRow = getSquareRow(squareNumber: num)
+        let newKnightSquareCol = getSquareCol(squareNumber: num)
+        
+        
+        knightRow = newKnightSquareRow
+        knightCol = newKnightSquareCol
+        
+        knightToMove = false
+        gunmanToMove = true
+        
+    }
+    
+    func moveGunman(num: Int) {
+        
+        let newGunmanSquareRow = getSquareRow(squareNumber: num)
+        let newGunmanSquareCol = getSquareCol(squareNumber: num)
+        
+        
+        gunmanRow = newGunmanSquareRow
+        gunmanCol = newGunmanSquareCol
+        
+        gunmanToMove = false
+        knightToMove = true
+        
+    }
+
+
+    func doesGunmanCheckKnight() -> Bool {
+        
+        if ((knightCol == gunmanCol) || (knightRow == gunmanRow)) {
+            return true
+        }
+        
+        return false
+    }
+    
+    
+    func doesKnightCheckGunman() -> Bool {
+        
+        if (abs(knightRow - gunmanRow) == 2 || abs(knightCol - gunmanCol) == 2) {
+            return true
+        }
+            
+            return false
+    }
+
+    func doesKnightCheckmateGunman() -> Bool {
+        
+        if (abs(knightRow - gunmanRow) == 1 || abs(knightCol - gunmanCol) == 1) {
+            return true
+        }
+        
+        return false
+    }
+    
+    func getKnightLocation(row: Int, col: Int) -> String {
+        
+        if ((row == 0 && col == 0) || (row == 0 && col == 4) || (row == 4 && col == 0) || (row == 4 && col == 4)) {
+            return "corner"
+        }
+        
+        else if (row == 0 || row == 4 || col == 0 || col == 4) {
+            return "edge"
+        }
+        
+        return "middle"
+    }
+    
+    func getGunmanLocation() -> String {
+        
+        if (gunmanRow == 0 && gunmanCol == 0) {
+            return "top-left-corner"
+        }
+        
+        else if (gunmanRow == 0 && gunmanCol == 4) {
+            return "top-right-corner"
+        }
+            
+        else if (gunmanRow == 4 && gunmanCol == 0) {
+            return "bottom-left-corner"
+        }
+        
+        else if (gunmanRow == 4 && gunmanCol == 4) {
+            return "bottom-right-corner"
+        }
+            
+            
+        else if ((gunmanRow == 0 && gunmanCol != 0) && (gunmanRow == 0 && gunmanCol != 4)) {            return "top-edge"
+        }
+        
+        else if ((gunmanRow == 4 && gunmanCol != 0) && (gunmanRow == 4 && gunmanCol != 4)) {
+            return "bottom-edge"
+        }
+        
+        else if ((gunmanRow != 0 && gunmanCol == 1) && (gunmanRow != 4 && gunmanCol != 1)) {
+            return "left-edge"
+        }
+        
+        else if ((gunmanRow != 0 && gunmanCol == 4) && (gunmanRow != 4 && gunmanCol == 4)) {
+            return "right-edge"
+        }
+
+        
+        return "middle"
+    }
+    
+    func getKnightLocation() -> String {
+        
+        if (knightRow == 0 && knightCol == 0) {
+            return "top-left-corner"
+        }
+            
+        else if (knightRow == 0 && knightCol == 4) {
+            return "top-right-corner"
+        }
+            
+        else if (knightRow == 4 && knightCol == 0) {
+            return "bottom-left-corner"
+        }
+            
+        else if (knightRow == 4 && knightCol == 4) {
+            return "bottom-right-corner"
+        }
+            
+        else if ((knightRow == 0 && knightCol != 0) && (knightRow == 0 && knightCol != 4)) {            return "top-edge"
+        }
+            
+        else if ((knightRow == 4 && knightCol != 0) && (knightRow == 4 && knightCol != 4)) {
+            return "bottom-edge"
+        }
+            
+        else if ((knightRow != 0 && knightCol == 1) && (knightRow != 4 && knightCol != 1)) {
+            return "left-edge"
+        }
+            
+        else if ((knightRow != 0 && knightCol == 4) && (knightRow != 4 && knightCol == 4)) {
+            return "right-edge"
+        }
+        
+        
+        return "middle"
+    }
+    
+    func isGunmanTrapped() {
+        
+        let location = getGunmanLocation()
+        let squareNumber = getGunmanSquareNumber()
+        
+    
+        if (location == "top-left-corner") {
+            if (
+        }
+    }
+    
+    func getKnightSquareNumber() -> Int {
+        return (5 * knightCol) + knightRow
+    }
+    
+    func getGunmanSquareNumber() -> Int {
+        return (5 * gunmanCol) + gunmanRow
+    }
+
+    
+    
+    func fillIsDeletedArray() {
+        
+        while (i < 24) {
+            
+            squareRows[i] =
+            i = i + 1
+            
+        }
+
+    
+    
+}
