@@ -1,0 +1,113 @@
+//
+//  BoardBrain.swift
+//  Blade
+//
+//  Created by Aditya Paruchuri on 10/29/16.
+//  Copyright © 2016 TStevensonApps. All rights reserved.
+//
+
+import Foundation
+
+
+class BoardBrain {
+    
+    
+    private var rows = 5
+    private var cols = 5
+    
+    
+    private var knightRow = 1
+    private var knightCol = 1
+    private var gunmanRow = 5
+    private var gunmanCol = 5
+    
+    
+    private var numSquares: Int {
+        return rows * cols
+    }
+    
+    private var knightToMove = true
+    private var gunmanToMove = false
+    private var knightSquare = 0
+   
+    private var rand = 0
+    
+    var squareRows: [Int] = []
+    var squareCols: [Int] = []
+    
+    var i = 0
+    
+    func fillRowsWithNumbers() {
+        while (i < rows) {
+    
+            squareRows[i] = i
+            i = i + 1
+    
+        }
+    }
+    
+    func fillColWithNumbers() {
+        while (i < cols) {
+            
+            squareCols[i] = i
+            i = i + 1
+            
+        }
+    }
+    
+    
+    func moveKnight(newSquareRow: Int, newSquareCol: Int) {
+        
+        knightRow = newSquareRow
+        knightCol = newSquareCol
+        
+    }
+    
+    func moveGunman(newSquareRow: Int, newSquareCol: Int) {
+        
+        gunmanRow = newSquareRow
+        gunmanCol = newSquareCol
+        
+    }
+
+    func doesGunmanCheckKnight() -> Bool {
+        
+        if ((knightCol == gunmanCol) || (knightRow == gunmanRow)) {
+            return true
+        }
+        
+        return false
+    }
+    
+    
+    func doesKnightCheckGunman() -> Bool {
+        
+        if (abs(knightRow - gunmanRow) == 2 || abs(knightCol - gunmanCol) == 2) {
+            return true
+        }
+            
+            return false
+    }
+
+    func doesKnightCheckmateGunman() -> Bool {
+        
+        if (abs(knightRow - gunmanRow) == 1 || abs(knightCol - gunmanCol) == 1) {
+            return true
+        }
+        
+        return false
+    }
+    
+    /* func deleteSquareAt(deleted: Int) {
+        
+        
+        squares.remove(at: deleted)
+        
+        // change color of square to black
+    }
+    
+    func */
+    
+    
+    
+}
